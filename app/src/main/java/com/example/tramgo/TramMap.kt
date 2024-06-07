@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.delay
 
@@ -42,9 +43,10 @@ fun TramMap(
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(singapore, 10f)
         }
+        val properties: MapProperties = MapProperties(isMyLocationEnabled = true)
         GoogleMap(
             modifier = Modifier.height(100.dp),
-            //properties = {},
+            properties = properties,
             cameraPositionState = cameraPositionState
         )
 
