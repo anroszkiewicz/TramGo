@@ -1,7 +1,10 @@
+import com.google.protobuf.gradle.*
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.jetbrains.kotlin.kapt")
+    id("com.google.protobuf") version "0.9.4"
 }
 
 android {
@@ -49,7 +52,31 @@ android {
         }
     }
 }
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.20.1"
+    }
+    plugins {
+        create("java") {
+            artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" //libs.protoc.gen.grpc.java.get().toString()
+        }
+    }
 
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                create("java") {
+                    option("lite")
+                }
+            }
+            it.builtins {
+                create("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -92,4 +119,11 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     kapt("androidx.room:room-compiler:$room_version")
+
+    //implementation("com.google.protobuf:protobuf-javalite:3.20.1")
+    //implementation("com.google.protobuf:protobuf-kotlin-lite:3.20.1")
+    implementation("com.google.protobuf:protobuf-java-util:3.21.7")
+    implementation("com.google.protobuf:protobuf-kotlin:3.21.2")
+
+    ext["protobufVersion"] = "3.21.2"
 }
