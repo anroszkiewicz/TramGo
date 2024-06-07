@@ -41,6 +41,10 @@ fun TramDetails(
         if (tram != null) {
             DetailCard(tram)
         }
+        /*val isTimerRunning = viewModel.isTimerRunning.observeAsState()
+        LaunchedEffect(key1 = isTimerRunning.value) {
+            readTramData()
+        }*/
     }
 }
 
