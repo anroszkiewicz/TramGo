@@ -16,6 +16,16 @@ class TramViewModel(private val repository: TramRepository) : ViewModel() {
     fun getTram(id: Int): LiveData<Tram> {
         return repository.getTram(id).asLiveData()
     }
+    fun markTramAsVisited(id: Int) {
+        viewModelScope.launch {
+            //val tram = getTram(id).value
+            Log.d("debug","trying to change tram status")
+            Log.d("debug",id.toString())
+            Log.d("debug","changing tram status")
+            //    tram.visited = 1
+            repository.updateTram(id)
+        }
+    }
 
     //internet access
     private val _positions = MutableLiveData<List<TramPosition>>()

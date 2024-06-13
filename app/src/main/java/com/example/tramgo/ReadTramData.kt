@@ -46,7 +46,7 @@ suspend fun readTramData() : List<TramPosition>
                     for (i in minTramNumbers.indices) {
                         if(number >= minTramNumbers[i] && number <= maxTramNumbers[i]) {
                             tramModel = tramNames[i]
-                            dbIndex = i
+                            dbIndex = i+1
                         }
                     }
 

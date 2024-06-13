@@ -78,7 +78,7 @@ fun TramMap(
             properties = properties,
             cameraPositionState = cameraPositionState
         ){
-            tramPositions.value?.let { BasicMarkersMapContent(trams = it) }
+            tramPositions.value?.let { BasicMarkersMapContent(trams = it, viewModel = viewModel) }
         }
 
     }
@@ -88,7 +88,11 @@ fun TramMap(
 @GoogleMapComposable
 fun BasicMarkersMapContent(
     trams: List<TramPosition>,
-    onTramClick: (Marker) -> Boolean = { false }
+    viewModel: TramViewModel,
+    onTramClick: (Int) -> Boolean = {
+        viewModel.markTramAsVisited(it)
+        false
+    }
 ) {
     trams.forEach { tram ->
         Log.d("tram", tram.latitude.toString() + " " + tram.longitude.toString())
@@ -97,9 +101,8 @@ fun BasicMarkersMapContent(
             title = tram.tramModel,
             //snippet = ,
             //tag = ,
-            onClick = { marker ->
-                onTramClick(marker)
-                false
+            onClick = {
+                onTramClick(tram.dbIndex)
             },
             zIndex = 2f
         )
