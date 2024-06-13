@@ -94,7 +94,7 @@ fun BasicMarkersMapContent(
         Log.d("tram", tram.latitude.toString() + " " + tram.longitude.toString())
         Marker(
             state = MarkerState(position = LatLng(tram.latitude.toDouble(), tram.longitude.toDouble())),
-            title = tram.lineNumber.toString(),
+            title = tram.tramModel,
             //snippet = ,
             //tag = ,
             onClick = { marker ->

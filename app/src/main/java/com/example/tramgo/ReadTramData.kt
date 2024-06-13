@@ -11,6 +11,10 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 import java.net.URL
 
+val minTramNumbers = intArrayOf(81,150,501,515,702,399,415,911,601,921,500,600)
+val maxTramNumbers = intArrayOf(149,153,514,559,712,414,460,920,630,940,500,600)
+val tramNames = arrayOf("Konstal","Alfa","Combino","Tramino","Helmut","Tatra","Beta","Beta dwukierunkowa","Gamma","Gamma dwukierunkowa","Niebieska Gamma","Czerwona Gamma")
+
 suspend fun readTramData() : List<TramPosition>
 {
     Log.d("debug","readTramData called")
@@ -27,37 +31,35 @@ suspend fun readTramData() : List<TramPosition>
     for (entity in fm.entityList) {
         if (entity.hasVehicle()) {
             val vp = entity.vehicle
-            if (vp.hasPosition()) {
+            val number = entity.vehicle.vehicle.id.toInt()
+
+            if (number < 1000 && vp.hasPosition()) {
                 val position: GtfsRealtime.Position = vp.position
                 if (position.hasLatitude() && position.hasLongitude()) {
 
                     val latitude: Float = position.latitude
                     val longitude: Float = position.longitude
-                  //  Log.d("latitude",latitude.toString());
-                   // Log.d("longitude",longitude.toString());
+
+                    var tramModel: String = ""
+                    var dbIndex: Int = 0
+
+                    for (i in minTramNumbers.indices) {
+                        if(number >= minTramNumbers[i] && number <= maxTramNumbers[i]) {
+                            tramModel = tramNames[i]
+                            dbIndex = i
+                        }
+                    }
 
                     val tramPosition = TramPosition(
-                        tramNumber = 0, 
+                        tramNumber = number,
                         latitude = latitude, 
                         longitude = longitude,
-                        lineNumber = 0,
-                        tramModel = "")
+                        dbIndex = dbIndex,
+                        tramModel = tramModel)
                     positions.add(tramPosition)
                 }
             }
         }
     }
     return positions
-}
-
-fun processVehiclePosition(vp: VehiclePosition) {
-    if (vp.hasPosition()) {
-        val position: GtfsRealtime.Position = vp.position
-        if (position.hasLatitude() && position.hasLongitude()) {
-            val latitude: Float = position.latitude
-            val longitude: Float = position.longitude
-            Log.d("latitude", latitude.toString());
-            Log.d("longitude", longitude.toString());
-        }
-    }
 }
