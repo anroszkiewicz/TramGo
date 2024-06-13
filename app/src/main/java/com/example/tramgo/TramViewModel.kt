@@ -25,7 +25,7 @@ class TramViewModel(private val repository: TramRepository) : ViewModel() {
                 try {
                     // Calling the repository is safe as it moves execution off
                     // the main thread
-                    _positions.value = repository.getTramPositions()
+                    _positions.postValue(repository.getTramPositions())
                 } catch (error: Exception) {
                     // Show error message to user
                     Log.d("debug", error.toString())

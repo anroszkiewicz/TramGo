@@ -33,8 +33,8 @@ suspend fun readTramData() : List<TramPosition>
 
                     val latitude: Float = position.latitude
                     val longitude: Float = position.longitude
-                    Log.d("latitude",latitude.toString());
-                    Log.d("longitude",longitude.toString());
+                  //  Log.d("latitude",latitude.toString());
+                   // Log.d("longitude",longitude.toString());
 
                     val tramPosition = TramPosition(
                         tramNumber = 0, 
