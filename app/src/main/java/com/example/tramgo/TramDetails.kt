@@ -55,6 +55,28 @@ fun DetailCard(tram: Tram) {
         .padding(20.dp)
         .fillMaxWidth()) {
 
+        val imageID: Int = LocalContext.current.resources.getIdentifier("tram" + tram.id.toString(), "drawable", "com.example.tramgo")
+        val context = LocalContext.current
+        val drawableId = remember(imageID) {
+            context.resources.getIdentifier(
+                "tram" + tram.id.toString(),
+                "drawable",
+                context.packageName
+            )
+        }
+        if(tram.visited == 0) {
+            Image(
+                painter = painterResource(id = R.drawable.questionmark),
+                contentDescription = null
+            )
+        }
+        else {
+            Image(
+                painterResource(id = imageID),
+                contentDescription = null
+            )
+        }
+
         Text(tram.displayName, modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
         Text(tram.fullName, modifier = Modifier.padding(10.dp))
         if(tram.visited == 0) {
