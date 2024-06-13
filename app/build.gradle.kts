@@ -101,6 +101,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
     implementation("com.google.android.material:material:1.8.0-alpha01")
     implementation("androidx.compose.material3:material3:1.0.0-beta03")
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

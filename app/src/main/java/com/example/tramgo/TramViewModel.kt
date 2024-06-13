@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TramViewModel(private val repository: TramRepository) : ViewModel() {
+    val location: MutableLiveData<LatLng> by lazy {MutableLiveData<LatLng>(LatLng(0.0, 0.0))}
     //database operations
     val allTrams : LiveData<List<Tram>> = repository.allTrams.asLiveData()
     fun getTram(id: Int): LiveData<Tram> {
