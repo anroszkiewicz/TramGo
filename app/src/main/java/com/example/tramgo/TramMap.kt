@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -150,13 +151,13 @@ fun BasicMarkersMapContent(
         false
     }
 ) {
+    val bitmap = BitmapDescriptorFactory.fromAsset("tram.png")
     trams.forEach { tram ->
         Log.d("tram", tram.latitude.toString() + " " + tram.longitude.toString())
         Marker(
             state = MarkerState(position = LatLng(tram.latitude.toDouble(), tram.longitude.toDouble())),
             title = tram.tramModel,
-            //snippet = ,
-            //tag = ,
+            icon = bitmap,
             onClick = {
                 onTramClick(tram.dbIndex, it)
             },
