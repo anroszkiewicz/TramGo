@@ -24,6 +24,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat
@@ -132,7 +133,7 @@ fun BasicMarkersMapContent(
     location: State<LatLng?>,
     navController: NavController,
     viewModel: TramViewModel,
-    onTramClick: (id: Int, marker: Marker) -> Boolean = { id, marker ->
+    onTramClick: (id: Int, name: String, marker: Marker) -> Boolean = { id, name, marker ->
         val arr = floatArrayOf(0f);
         val latitude = location.value?.latitude ?: 0.0
         val longitude = location.value?.longitude ?: 0.0
@@ -146,6 +147,7 @@ fun BasicMarkersMapContent(
         if(arr[0] < 50) {
             viewModel.markTramAsVisited(id)
             viewModel.displayDialog.value = id
+            viewModel.displayName = name
             //navController.navigate(route = "TramDetails/$id")
         }
         false
@@ -159,7 +161,7 @@ fun BasicMarkersMapContent(
             title = tram.tramModel,
             icon = bitmap,
             onClick = {
-                onTramClick(tram.dbIndex, it)
+                onTramClick(tram.dbIndex, tram.tramModel ,it)
             },
             zIndex = 2f
         )
@@ -191,6 +193,11 @@ fun NewTramDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Text(
+                    text = viewModel.displayName,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(16.dp)
+                )
                 Text(
                     text = "Gratulacje! Złapałeś tramwaj!\nCzy chcesz przejść do widoku szczegółów?",
                     modifier = Modifier.padding(16.dp)
