@@ -41,10 +41,6 @@ fun TramDetails(
         if (tram != null) {
             DetailCard(tram)
         }
-        /*val isTimerRunning = viewModel.isTimerRunning.observeAsState()
-        LaunchedEffect(key1 = isTimerRunning.value) {
-            readTramData()
-        }*/
     }
 }
 
@@ -79,12 +75,12 @@ fun DetailCard(tram: Tram) {
 
         Text(tram.displayName, modifier = Modifier.padding(10.dp), fontWeight = FontWeight.Bold)
         Text(tram.fullName, modifier = Modifier.padding(10.dp))
+        Text("Liczba składów w Poznaniu: " + tram.number.toString(), modifier = Modifier.padding(10.dp))
         if(tram.visited == 0) {
             Text("Nieodblokowany", modifier = Modifier.padding(10.dp))
         }
         else {
             Text("Odblokowany", modifier = Modifier.padding(10.dp))
         }
-        Text("Liczba składów w Poznaniu: " + tram.number.toString(), modifier = Modifier.padding(10.dp))
     }
 }

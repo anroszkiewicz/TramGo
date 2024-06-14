@@ -45,6 +45,9 @@ class TramViewModel(private val repository: TramRepository) : ViewModel() {
 
             }
         }
+
+    //map
+    val displayDialog: MutableLiveData<Int> by lazy {MutableLiveData<Int>(0)}
 }
 
 class TramViewModelFactory(private val repository: TramRepository) : ViewModelProvider.Factory {

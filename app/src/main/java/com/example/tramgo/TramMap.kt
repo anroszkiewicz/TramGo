@@ -4,17 +4,28 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -40,6 +51,12 @@ fun TramMap(
     viewModel: TramViewModel
 ) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+
+        val displayDialog = viewModel.displayDialog.observeAsState()
+        if(displayDialog.value != 0) {
+            NewTramDialog(viewModel = viewModel, navController = navController, displayDialog)
+        }
+
         val location = viewModel.location.observeAsState()
         var properties = MapProperties()
         if (ContextCompat.checkSelfPermission(
@@ -127,7 +144,8 @@ fun BasicMarkersMapContent(
         )
         if(arr[0] < 50) {
             viewModel.markTramAsVisited(id)
-            navController.navigate(route = "TramDetails/$id")
+            viewModel.displayDialog.value = id
+            //navController.navigate(route = "TramDetails/$id")
         }
         false
     }
@@ -144,5 +162,61 @@ fun BasicMarkersMapContent(
             },
             zIndex = 2f
         )
+    }
+}
+
+@Composable
+fun NewTramDialog(
+    viewModel: TramViewModel,
+    navController: NavController,
+    displayDialog: State<Int?>,
+    onDismissRequest: () -> Unit = { viewModel.displayDialog.value = 0 },
+    onConfirmation: () -> Unit = {
+        val id = viewModel.displayDialog.value
+        viewModel.displayDialog.value = 0
+        navController.navigate(route = "TramDetails/$id")
+    }
+) {
+    Dialog(onDismissRequest = { onDismissRequest() }) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "Gratulacje! Złapałeś tramwaj!\nCzy chcesz przejść do widoku szczegółów?",
+                    modifier = Modifier.padding(16.dp)
+                )
+                /*Text(
+                    text = "Czy chcesz przejść do widoku szczegółów?",
+                    modifier = Modifier.padding(16.dp),
+                )*/
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    TextButton(
+                        onClick = { onConfirmation() },
+                        modifier = Modifier.padding(8.dp),
+                    ) {
+                        Text("Tak")
+                    }
+                    TextButton(
+                        onClick = { onDismissRequest() },
+                        modifier = Modifier.padding(8.dp),
+                    ) {
+                        Text("Nie")
+                    }
+
+                }
+            }
+        }
     }
 }
